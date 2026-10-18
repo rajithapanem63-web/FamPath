@@ -7,14 +7,19 @@ import { z } from "zod";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/routing";
 import { Link } from "@/i18n/routing";
-import { login } from "@/lib/auth";
-import { getErrorCode } from "@/lib/api";
 
 const schema = z.object({
   email: z.string().email("Valid email required"),
   password: z.string().min(1, "Password required"),
 });
 type FormValues = z.infer<typeof schema>;
+
+// Get backend URL - works in both client and server components
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (typeof window !== "undefined" && window.location.hostname !== "localhost"
+    ? "https://fampath-backend.onrender.com"
+    : "http://localhost:8001");
 
 export default function SignInPage() {
   const t = useTranslations("auth.signIn");
@@ -33,71 +38,126 @@ export default function SignInPage() {
   async function onSubmit(data: FormValues) {
     setServerError(null);
     try {
-      const user = await login(data.email, data.password);
-      // Persist user in global auth store
-      const { useAuthStore } = await import("@/stores/authStore");
-      useAuthStore.getState().setUser(user);
+      // Direct fetch call — avoids any interceptor or module issues
+      const res = await fetch(`${API_URL}/api/v1/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email: data.email, password: data.password }),
+      });
+
+      if (!res.ok) {
+        const json = await res.json().catch(() => ({}));
+        const code = json?.error_code || json?.detail?.error_code || "UNKNOWN";
+
+        if (code === "INVALID_CREDENTIALS") {
+          setServerError(t("errors.INVALID_CREDENTIALS"));
+        } else if (code === "EMAIL_NOT_VERIFIED") {
+          setServerError(t("errors.EMAIL_NOT_VERIFIED"));
+        } else if (code === "ACCOUNT_LOCKED") {
+          setServerError(t("errors.ACCOUNT_LOCKED"));
+        } else if (code === "RATE_LIMIT_EXCEEDED") {
+          setServerError(t("errors.RATE_LIMIT_EXCEEDED"));
+        } else if (res.status === 422) {
+          setServerError("Invalid email or password format.");
+        } else {
+          setServerError("Sign in failed. Please try again.");
+        }
+        return;
+      }
+
+      const json = await res.json();
+      const accessToken: string = json.access_token;
+      const user = json.user;
+
+      // Store token
+      sessionStorage.setItem("access_token", accessToken);
+
+      // Store user in Zustand store
+      try {
+        const { useAuthStore } = await import("@/stores/authStore");
+        useAuthStore.getState().setUser(user);
+      } catch {
+        // Store might not load — still redirect
+      }
+
+      // Navigate to dashboard
       router.push("/dashboard");
     } catch (err) {
-      const code = getErrorCode(err);
-      if (code === "INVALID_CREDENTIALS") {
-        setServerError(t("errors.INVALID_CREDENTIALS"));
-      } else if (code === "EMAIL_NOT_VERIFIED") {
-        setServerError(t("errors.EMAIL_NOT_VERIFIED"));
-      } else if (code === "ACCOUNT_LOCKED") {
-        setServerError(t("errors.ACCOUNT_LOCKED"));
-      } else if (code === "RATE_LIMIT_EXCEEDED") {
-        setServerError(t("errors.RATE_LIMIT_EXCEEDED"));
-      } else {
-        setServerError("Sign in failed. Please try again.");
-      }
+      // Network error
+      console.error("Sign in error:", err);
+      setServerError(
+        "Unable to connect to server. Please check your connection."
+      );
     }
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-md bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        {/* Logo */}
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-brand-600">FamPath</h1>
+          <h1 className="text-3xl font-bold text-blue-600">FamPath</h1>
+          <p className="text-sm text-gray-500 mt-1">
+            AI-powered engineering college guidance
+          </p>
         </div>
 
         <h2 className="text-xl font-semibold mb-6">{t("title")}</h2>
 
+        {/* Error banner */}
         {serverError && (
           <div
             role="alert"
+            aria-live="polite"
             className="mb-4 rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700"
           >
             {serverError}
           </div>
         )}
 
-        <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          className="space-y-4"
+        >
+          {/* Email */}
           <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               {t("emailLabel")}
             </label>
             <input
               id="email"
               type="email"
               autoComplete="email"
-              className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              placeholder="you@example.com"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               {...register("email")}
               aria-invalid={!!errors.email}
+              aria-describedby={errors.email ? "email-error" : undefined}
             />
             {errors.email && (
-              <p className="mt-1 text-xs text-red-600">{errors.email.message}</p>
+              <p id="email-error" className="mt-1 text-xs text-red-600">
+                {errors.email.message}
+              </p>
             )}
           </div>
 
+          {/* Password */}
           <div>
             <div className="flex items-center justify-between mb-1">
-              <label htmlFor="password" className="block text-sm font-medium">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 {t("passwordLabel")}
               </label>
               <Link
                 href="/forgot-password"
-                className="text-xs text-brand-600 hover:underline"
+                className="text-xs text-blue-600 hover:underline"
               >
                 {t("forgotPassword")}
               </Link>
@@ -106,27 +166,61 @@ export default function SignInPage() {
               id="password"
               type="password"
               autoComplete="current-password"
-              className="w-full rounded-lg border border-input px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               {...register("password")}
               aria-invalid={!!errors.password}
+              aria-describedby={errors.password ? "password-error" : undefined}
             />
             {errors.password && (
-              <p className="mt-1 text-xs text-red-600">{errors.password.message}</p>
+              <p id="password-error" className="mt-1 text-xs text-red-600">
+                {errors.password.message}
+              </p>
             )}
           </div>
 
+          {/* Submit */}
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-brand-600 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2"
+            className="w-full bg-blue-600 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
           >
-            {isSubmitting ? tCommon("loading") : t("submitButton")}
+            {isSubmitting ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg
+                  className="animate-spin h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                  />
+                </svg>
+                {tCommon("loading")}
+              </span>
+            ) : (
+              t("submitButton")
+            )}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-muted-foreground">
+        {/* Sign up link */}
+        <div className="mt-6 text-center text-sm text-gray-500">
           {t("noAccount")}{" "}
-          <Link href="/sign-up" className="text-brand-600 hover:underline font-medium">
+          <Link
+            href="/sign-up"
+            className="text-blue-600 hover:underline font-medium"
+          >
             {t("signUpLink")}
           </Link>
         </div>
