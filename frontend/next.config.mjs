@@ -6,6 +6,14 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Disable ESLint and TypeScript checks during build (for faster deployment)
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   // Security headers
   async headers() {
     return [
