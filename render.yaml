@@ -40,13 +40,11 @@ services:
     plan: free
     branch: main
     rootDir: frontend
-    buildCommand: npm ci && npm run build
+    buildCommand: NODE_ENV=development npm ci && npm run build
     startCommand: npm start
     envVars:
       - key: NEXT_PUBLIC_API_URL
         value: https://fampath-backend.onrender.com
-      - key: NODE_ENV
-        value: production
 
 databases:
   - name: fampath-db
