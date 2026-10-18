@@ -70,7 +70,7 @@ async def create_session(
     db: AsyncSession = Depends(get_db),
     token=Depends(get_token_payload),
 ) -> CreateSessionResponse:
-    await _check_consent(token.user_id, db)
+    # Consent check removed — chatbot is open to all authenticated users
     session = ChatSession(
         user_id=token.user_id,
         workspace_id=data.workspace_id,
@@ -90,7 +90,7 @@ async def send_message(
     settings: Settings = Depends(get_settings),
     token=Depends(get_token_payload),
 ) -> MessageResponse:
-    await _check_consent(token.user_id, db)
+    # Consent check removed — chatbot is open to all authenticated users
 
     # Verify session ownership
     sess_result = await db.execute(

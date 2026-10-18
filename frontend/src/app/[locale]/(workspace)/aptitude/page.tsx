@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { get, post } from "@/lib/api";
 import {
   RadarChart,
@@ -64,47 +64,33 @@ export default function AptitudePage() {
   const [result, setResult] = useState<AptitudeResult | null>(null);
   const [showReview, setShowReview] = useState(false);
 
-  // Check for existing result
-  const { data: existingResult } = useQuery({
-    queryKey: ["aptitude", "latest"],
-    queryFn: () => get<AptitudeResult | null>("/aptitude/results/latest"),
-  });
-
-  // Start quiz
+  // Start quiz (public - no auth required)
   const startMutation = useMutation({
-    mutationFn: () => get<SessionResponse>("/aptitude/questions"),
+    mutationFn: () => get<SessionResponse>("/aptitude/public/questions"),
     onSuccess: (data) => {
-      console.log("Quiz started successfully:", data);
       setSessionId(data.session_id);
       setCurrentIdx(0);
       setAnswers({});
       setShowReview(false);
     },
-    onError: (error: any) => {
-      console.error("Failed to start quiz:", error);
-      // Check if it's an authentication error
-      if (error?.response?.status === 401 || error?.message?.includes("401")) {
-        // Redirect to sign in
-        window.location.href = "/en/sign-in?redirect=/en/aptitude";
-      }
-    },
   });
 
-  // Submit quiz
+
+  // Submit quiz (public - sends all collected answers at once)
   const submitMutation = useMutation({
-    mutationFn: () =>
-      post<AptitudeResult>(`/aptitude/sessions/${sessionId}/submit`),
+    mutationFn: () => {
+      const questions = startMutation.data?.questions ?? [];
+      const responses = questions
+        .filter((q) => answers[q.id] !== undefined)
+        .map((q) => ({ question_id: q.id, value: answers[q.id] }));
+      return post<AptitudeResult>("/aptitude/public/submit", { responses });
+    },
     onSuccess: (data) => setResult(data),
   });
 
-  // Save responses
-  const saveResponses = async (questionId: string, value: number) => {
-    const newAnswers = { ...answers, [questionId]: value };
-    setAnswers(newAnswers);
-
-    await post(`/aptitude/sessions/${sessionId}/responses`, {
-      responses: [{ question_id: questionId, value }],
-    });
+  // Save responses locally (no API call for public mode)
+  const saveResponses = (questionId: string, value: number) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
   const handleNext = () => {
@@ -126,9 +112,10 @@ export default function AptitudePage() {
     await submitMutation.mutateAsync();
   };
 
-  const displayResult = result ?? (existingResult || null);
+  const displayResult = result ?? null;
   const questions = startMutation.data?.questions ?? [];
   const currentQuestion = questions[currentIdx];
+
 
   // ── Results view ───────────────────────────────────────────────────────────
   if (displayResult && !sessionId) {

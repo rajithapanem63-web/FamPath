@@ -14,7 +14,7 @@ from fastapi.responses import JSONResponse
 from app.api.auth_router import router as auth_router
 from app.api.workspace_router import profile_router, router as workspace_router
 from app.api.prediction_router import router as prediction_router
-from app.api.aptitude_router import router as aptitude_router
+from app.api.aptitude_router import router as aptitude_router, public_router as aptitude_public_router
 from app.api.alignment_router import router as alignment_router
 from app.api.cost_router import router as cost_router
 from app.api.chat_router import router as chat_router
@@ -116,6 +116,7 @@ def create_app() -> FastAPI:
     app.include_router(profile_router, prefix=api_v1)
     app.include_router(prediction_router, prefix=api_v1)
     app.include_router(aptitude_router, prefix=api_v1)
+    app.include_router(aptitude_public_router, prefix=api_v1)
     app.include_router(alignment_router, prefix=api_v1)
     app.include_router(cost_router, prefix=api_v1)
     app.include_router(chat_router, prefix=api_v1)

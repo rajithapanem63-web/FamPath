@@ -19,8 +19,84 @@ from app.services.aptitude_service import (
     compute_riasec_scores,
     format_top_branches,
 )
+from app.services.aptitude_service import (
+    compute_branch_fit as _compute_branch_fit,
+    compute_riasec_scores as _compute_riasec_scores,
+    format_top_branches as _format_top_branches,
+)
 
 router = APIRouter(prefix="/aptitude", tags=["Aptitude & Branch Fit"])
+public_router = APIRouter(prefix="/aptitude/public", tags=["Aptitude Public"])
+
+
+class PublicAnswersRequest(BaseModel):
+    responses: list[dict] = Field(min_length=1,
+        description="List of {question_id, value} dicts")
+
+
+@public_router.get("/questions", response_model=StartSessionResponse, summary="Get aptitude questions (no login required)")
+async def public_start_quiz(
+    db: AsyncSession = Depends(get_db),
+) -> StartSessionResponse:
+    """Public endpoint — returns questions without requiring authentication."""
+    result = await db.execute(
+        select(QuizQuestion).where(QuizQuestion.is_active == True)
+    )
+    questions = result.scalars().all()
+    if not questions:
+        raise HTTPException(status_code=404, detail={"error_code": "NO_QUESTIONS_AVAILABLE"})
+
+    # Deterministic shuffle based on count so it's reproducible
+    shuffled = list(questions)[:20]
+    # Give a fake session_id so frontend can track locally
+    fake_session_id = uuid.uuid5(uuid.NAMESPACE_DNS, "public-quiz")
+
+    return StartSessionResponse(
+        session_id=fake_session_id,
+        questions=[
+            QuestionResponse(id=q.id, text=q.question_text, options=q.options, riasec_dimension=q.riasec_dimension)
+            for q in shuffled
+        ],
+        total=len(shuffled),
+    )
+
+
+@public_router.post("/submit", response_model=SubmitResponse, summary="Submit aptitude answers (no login required)")
+async def public_submit_quiz(
+    data: PublicAnswersRequest,
+    db: AsyncSession = Depends(get_db),
+) -> SubmitResponse:
+    """Public endpoint — computes RIASEC scores without saving to DB or requiring auth."""
+    # Fetch question metadata for the given question IDs
+    question_ids = [uuid.UUID(r["question_id"]) for r in data.responses if "question_id" in r]
+    result = await db.execute(
+        select(QuizQuestion).where(QuizQuestion.id.in_(question_ids))
+    )
+    questions_map = {str(q.id): q for q in result.scalars().all()}
+
+    response_dicts = []
+    for r in data.responses:
+        qid = r.get("question_id", "")
+        q = questions_map.get(qid)
+        if q:
+            response_dicts.append({
+                "question_id": qid,
+                "riasec_dimension": q.riasec_dimension,
+                "response_value": r.get("value", 3),
+                "weight": float(q.weight),
+            })
+
+    riasec = compute_riasec_scores(response_dicts)
+    branch_fits = compute_branch_fit(riasec)
+    top_branches = format_top_branches(branch_fits)
+    branch_fit_dict = {r.branch_code: r.score for r in branch_fits}
+
+    return SubmitResponse(
+        riasec_scores=riasec,
+        branch_fit_scores=branch_fit_dict,
+        top_branches=top_branches,
+    )
+
 
 
 class QuestionResponse(BaseModel):

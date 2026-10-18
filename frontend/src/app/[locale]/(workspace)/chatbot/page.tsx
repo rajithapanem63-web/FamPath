@@ -27,14 +27,6 @@ export default function ChatbotPage() {
   const { workspace } = useWorkspaceStore();
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [input, setInput] = useState("");
-  const [showConsent, setShowConsent] = useState(false);
-  // Persist consent in localStorage so user doesn't see it every visit
-  const [hasConsent, setHasConsent] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return localStorage.getItem("fampath_chatbot_consent") === "true";
-    }
-    return false;
-  });
   const bottomRef = useRef<HTMLDivElement>(null);
   const qc = useQueryClient();
 
@@ -55,10 +47,6 @@ export default function ChatbotPage() {
         workspace_id: workspace?.id,
       }),
     onSuccess: (data) => setSessionId(data.session_id),
-    onError: (err: unknown) => {
-      const code = (err as { response?: { data?: { error_code?: string } } }).response?.data?.error_code;
-      if (code === "CHATBOT_CONSENT_REQUIRED") setShowConsent(true);
-    },
   });
 
   // Send message
@@ -71,18 +59,15 @@ export default function ChatbotPage() {
     },
   });
 
+  // Auto-start chat session on mount
+  useEffect(() => {
+    createSession.mutate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  function handleStart() {
-    setHasConsent(true);
-    setShowConsent(false);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("fampath_chatbot_consent", "true");
-    }
-    createSession.mutate();
-  }
 
   function handleSend(e: React.FormEvent) {
     e.preventDefault();
@@ -90,24 +75,36 @@ export default function ChatbotPage() {
     sendMessage.mutate(input.trim());
   }
 
-  // ── Consent modal ──────────────────────────────────────────────────────────
-  if (showConsent || (!sessionId && !hasConsent)) {
+  // Loading state while session is being created
+  if (!sessionId && createSession.isPending) {
     return (
-      <div className="max-w-lg mx-auto p-6">
-        <h1 className="text-2xl font-bold mb-2">{t("title")}</h1>
-        <div className="bg-white rounded-xl border p-6 space-y-4 mt-4">
-          <h2 className="text-lg font-semibold">{t("consentTitle")}</h2>
-          <p className="text-sm text-muted-foreground">{t("consentDescription")}</p>
+      <div className="max-w-2xl mx-auto p-6 flex items-center justify-center h-64">
+        <div className="text-center space-y-3">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand-600 border-t-transparent mx-auto" />
+          <p className="text-sm text-muted-foreground">Starting Ask FamPath…</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state - retry button
+  if (!sessionId && createSession.isError) {
+    return (
+      <div className="max-w-2xl mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-4">{t("title")}</h1>
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center space-y-4">
+          <p className="text-red-700 text-sm">Could not start a chat session. Please make sure you are signed in.</p>
           <button
-            onClick={handleStart}
-            className="w-full rounded-lg bg-brand-600 text-white py-2.5 font-semibold hover:bg-brand-700"
+            onClick={() => createSession.mutate()}
+            className="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm font-medium hover:bg-brand-700"
           >
-            {t("consentButton")}
+            Try Again
           </button>
         </div>
       </div>
     );
   }
+
 
   // ── Chat interface ─────────────────────────────────────────────────────────
   return (
