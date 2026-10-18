@@ -12,7 +12,7 @@ import axios, {
 const BASE_URL =
   (typeof process !== "undefined" &&
     process.env["NEXT_PUBLIC_API_URL"]) ||
-  "http://localhost:8000";
+  "http://localhost:8001";
 
 export const apiClient: AxiosInstance = axios.create({
   baseURL: `${BASE_URL}/api/v1`,
@@ -90,7 +90,8 @@ apiClient.interceptors.response.use(
         processQueue(refreshError, null);
         sessionStorage.removeItem("access_token");
         if (typeof window !== "undefined") {
-          window.location.href = "/en/sign-in";
+          const locale = document.documentElement.lang || "en";
+          window.location.href = `/${locale}/sign-in`;
         }
         return Promise.reject(refreshError);
       } finally {

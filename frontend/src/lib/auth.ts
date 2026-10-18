@@ -2,7 +2,6 @@
  * Auth helpers: token storage (sessionStorage for access token),
  * login/logout helpers, and current-user retrieval.
  */
-"use client";
 
 import { post, get } from "@/lib/api";
 
