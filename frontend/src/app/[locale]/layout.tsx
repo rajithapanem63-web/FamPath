@@ -7,6 +7,9 @@ import type { Locale } from "@/i18n/routing";
 import Providers from "@/components/Providers";
 import "../globals.css";
 
+// Force dynamic rendering for all pages (required for next-intl)
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: {
     default: "FamPath – Engineering College Decision Support",
@@ -50,9 +53,4 @@ export default async function LocaleLayout({ children, params }: Props) {
       </body>
     </html>
   );
-}
-
-// Generate static paths for all locales
-export function generateStaticParams() {
-  return routing.locales.map((locale) => ({ locale }));
 }
