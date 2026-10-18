@@ -14,7 +14,7 @@ $env:FAMPATH_APP_ENV = "development"
 $env:FAMPATH_DEBUG = "true"
 $env:FAMPATH_LLM_PROVIDER = "mock"
 $env:FAMPATH_REDIS_URL = "redis://localhost:6379/0"
-$env:FAMPATH_CORS_ORIGINS = '["http://localhost:3000"]'
+$env:FAMPATH_CORS_ORIGINS = '["http://localhost:3000","http://localhost:3001","http://localhost:3002","http://127.0.0.1:3000","http://127.0.0.1:3001","http://127.0.0.1:3002"]'
 $env:FAMPATH_LOG_LEVEL = "INFO"
 
 Write-Host "Environment set" -ForegroundColor Green

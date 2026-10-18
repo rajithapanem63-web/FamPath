@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,7 +19,7 @@ const API_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   (typeof window !== "undefined" && window.location.hostname !== "localhost"
     ? "https://fampath-backend.onrender.com"
-    : "http://localhost:8001");
+    : "http://localhost:8000");
 
 export default function SignInPage() {
   const t = useTranslations("auth.signIn");
@@ -30,21 +30,51 @@ export default function SignInPage() {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
   });
 
+  function fillDemoCredentials() {
+    setValue("email", "demo@fampath.com");
+    setValue("password", "Demo1234");
+    setServerError(null);
+  }
+
   async function onSubmit(data: FormValues) {
     setServerError(null);
     try {
-      // Direct fetch call — avoids any interceptor or module issues
-      const res = await fetch(`${API_URL}/api/v1/auth/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email: data.email, password: data.password }),
-      });
+      // Build candidate URLs (configured URL first, then local fallback ports if on localhost)
+      const candidateUrls = [API_URL];
+      if (API_URL.includes("localhost:8000")) {
+        candidateUrls.push(API_URL.replace("localhost:8000", "localhost:8001"));
+        candidateUrls.push(API_URL.replace("localhost:8000", "127.0.0.1:8000"));
+      } else if (API_URL.includes("localhost:8001")) {
+        candidateUrls.push(API_URL.replace("localhost:8001", "localhost:8000"));
+        candidateUrls.push(API_URL.replace("localhost:8001", "127.0.0.1:8000"));
+      }
+
+      let res: Response | null = null;
+      let lastErr: unknown = null;
+
+      for (const baseUrl of candidateUrls) {
+        try {
+          res = await fetch(`${baseUrl}/api/v1/auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email: data.email.trim(), password: data.password }),
+          });
+          if (res) break;
+        } catch (fetchErr) {
+          lastErr = fetchErr;
+        }
+      }
+
+      if (!res) {
+        throw lastErr || new Error("Failed to connect");
+      }
 
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
@@ -61,7 +91,7 @@ export default function SignInPage() {
         } else if (res.status === 422) {
           setServerError("Invalid email or password format.");
         } else {
-          setServerError("Sign in failed. Please try again.");
+          setServerError("Sign in failed. Please check your credentials.");
         }
         return;
       }
@@ -87,7 +117,7 @@ export default function SignInPage() {
       // Network error
       console.error("Sign in error:", err);
       setServerError(
-        "Unable to connect to server. Please check your connection."
+        `Unable to connect to the backend server (${API_URL}). Please verify that the backend server is running on port 8000.`
       );
     }
   }
@@ -182,7 +212,7 @@ export default function SignInPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-blue-600 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+            className="w-full bg-blue-600 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors shadow-sm"
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
@@ -214,8 +244,19 @@ export default function SignInPage() {
           </button>
         </form>
 
+        {/* Demo Account Quick-Fill */}
+        <div className="mt-4 pt-4 border-t border-gray-100 text-center">
+          <button
+            type="button"
+            onClick={fillDemoCredentials}
+            className="text-xs text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 rounded-md px-3 py-1.5 transition-colors font-medium border border-blue-200"
+          >
+            🔑 Fill Demo Credentials (demo@fampath.com)
+          </button>
+        </div>
+
         {/* Sign up link */}
-        <div className="mt-6 text-center text-sm text-gray-500">
+        <div className="mt-4 text-center text-sm text-gray-500">
           {t("noAccount")}{" "}
           <Link
             href="/sign-up"

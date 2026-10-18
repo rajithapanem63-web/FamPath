@@ -12,7 +12,7 @@ import axios, {
 const BASE_URL =
   (typeof process !== "undefined" &&
     process.env["NEXT_PUBLIC_API_URL"]) ||
-  "http://localhost:8001";
+  "http://localhost:8000";
 
 export const apiClient: AxiosInstance = axios.create({
   baseURL: `${BASE_URL}/api/v1`,
