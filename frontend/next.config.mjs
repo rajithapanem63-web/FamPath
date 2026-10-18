@@ -41,8 +41,8 @@ const nextConfig = {
 
   reactStrictMode: true,
 
-  // Standalone output for Docker
-  output: "standalone",
+  // Force dynamic rendering (next-intl requires it)
+  // output: "standalone",  // Disabled for next-intl compatibility
 };
 
 export default withNextIntl(nextConfig);
