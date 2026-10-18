@@ -270,30 +270,6 @@ async def request_password_reset(email: str, db: AsyncSession) -> str | None:
 
 
 async def reset_password(token_str: str, new_password: str, db: AsyncSession) -> None:
-    """Reset user password using the reset token."""
-    token_hash = hash_token(token_str)
-    result = await db.execute(
-        select(EmailToken).where(
-            EmailToken.token_hash == token_hash,
-            EmailToken.purpose == "password_reset",
-        )
-    )
-    token = result.scalar_one_or_none()
-    if not token or not token.is_valid:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail={"error_code": "INVALID_RESET_TOKEN", "message": "Token invalid or expired"},
-        )
-
-    token.used_at = datetime.now(UTC)
-
-    user_result = await db.execute(select(User).where(User.id == token.user_id))
-    user = user_result.scalar_one()
-    user.password_hash = hash_password(new_password)
-    logger.info("password_reset", user_id=str(user.id))
-
-
-async def reset_password(token_str: str, new_password: str, db: AsyncSession) -> None:
     """Validate reset token and update password."""
     token_hash = hash_token(token_str)
     result = await db.execute(

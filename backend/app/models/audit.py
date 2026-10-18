@@ -4,21 +4,11 @@ from __future__ import annotations
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, String, Text, JSON
+from sqlalchemy import DateTime, ForeignKey, JSON, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.models.base import GUID
+from app.models.base import GUID, UUIDPKMixin
 from app.core.database import Base
-from app.models.base import UUIDPKMixin
-
-
-def _jsonb_or_json():
-    """Return JSONB for PostgreSQL, JSON for SQLite."""
-    try:
-        from sqlalchemy.dialects.postgresql import JSONB
-        return JSONB
-    except ImportError:
-        return JSON
 
 
 class AuditLog(UUIDPKMixin, Base):
