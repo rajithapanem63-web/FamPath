@@ -52,30 +52,11 @@ async def register(
     db: AsyncSession = Depends(get_db),
     settings: Settings = Depends(get_settings),
 ) -> MessageResponse:
-    """Create an account and send email verification."""
+    """Create an account and activate immediately without email verification."""
     user = await auth_service.register_user(data, db, settings)
-    raw_token: str = user._verification_token  # type: ignore[attr-defined]
-    
-    # Commit the user to database
+    user.status = "active"
     await db.commit()
-    
-    # AUTO-VERIFY in development mode (bypass email for demo)
-    if settings.APP_ENV in ("development", "testing"):
-        await auth_service.verify_email(raw_token, db)
-        await db.commit()
-        return MessageResponse(message="Account created and verified! You can now sign in.")
-    
-    # Production: send email via Celery
-    try:
-        send_verification_email.delay(
-            to_email=user.email,
-            full_name=user.full_name or user.email,
-            token=raw_token,
-            locale=user.preferred_locale,
-        )
-    except Exception:
-        pass  # Email sending is best-effort
-    return MessageResponse(message="Verification email sent")
+    return MessageResponse(message="Account created successfully! You can now sign in.")
 
 
 @router.post(

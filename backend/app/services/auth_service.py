@@ -51,7 +51,7 @@ async def register_user(
         role=data.role,
         full_name=data.full_name,
         preferred_locale=data.preferred_locale,
-        status="pending_verification",
+        status="active",
     )
     db.add(user)
     await db.flush()  # get user.id before commit
@@ -158,11 +158,9 @@ async def login(
             user.status = "active"
             user.failed_login_count = 0
 
+    # Auto-activate any user that was in pending_verification
     if user.status == "pending_verification":
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail={"error_code": "EMAIL_NOT_VERIFIED", "message": "Please verify your email"},
-        )
+        user.status = "active"
 
     # Reset failed count on successful login
     user.failed_login_count = 0

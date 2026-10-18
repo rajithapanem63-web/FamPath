@@ -55,13 +55,16 @@ export default function SignUpPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="w-full max-w-md bg-white rounded-xl shadow-sm border p-8 text-center">
-          <div className="text-5xl mb-4">✉️</div>
-          <h2 className="text-xl font-semibold mb-2">{t("successMessage")}</h2>
-          <p className="text-muted-foreground text-sm mb-6">
-            Click the link in your email to activate your account.
+          <div className="text-5xl mb-4">🎉</div>
+          <h2 className="text-xl font-semibold mb-2">Account Created!</h2>
+          <p className="text-gray-600 text-sm mb-6">
+            Your account is active. You can now sign in directly.
           </p>
-          <Link href="/sign-in" className="text-brand-600 hover:underline text-sm">
-            Back to sign in
+          <Link
+            href="/sign-in"
+            className="inline-block w-full bg-blue-600 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-blue-700 transition"
+          >
+            Go to Sign In
           </Link>
         </div>
       </div>
