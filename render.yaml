@@ -12,25 +12,23 @@ services:
       pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: APP_ENV
+      - key: FAMPATH_APP_ENV
         value: production
-      - key: APP_VERSION
-        value: 0.1.0
-      - key: DATABASE_URL
+      - key: FAMPATH_DB_URL
         fromDatabase:
           name: fampath-db
           property: connectionString
-      - key: SECRET_KEY
+      - key: FAMPATH_SECRET_KEY
         generateValue: true
-      - key: CORS_ORIGINS
+      - key: FAMPATH_CORS_ORIGINS
         value: https://fampath-frontend.onrender.com
-      - key: SMTP_HOST
+      - key: FAMPATH_SMTP_HOST
         value: smtp.gmail.com
-      - key: SMTP_PORT
+      - key: FAMPATH_SMTP_PORT
         value: 587
-      - key: SMTP_FROM_EMAIL
+      - key: FAMPATH_SMTP_FROM_EMAIL
         value: noreply@fampath.dev
-      - key: SMTP_FROM_NAME
+      - key: FAMPATH_SMTP_FROM_NAME
         value: FamPath
     healthCheckPath: /health
 
