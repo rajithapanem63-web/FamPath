@@ -116,8 +116,13 @@ export default function SignInPage() {
     } catch (err) {
       // Network error
       console.error("Sign in error:", err);
+      const isRender =
+        typeof window !== "undefined" &&
+        (window.location.hostname !== "localhost" || API_URL.includes("onrender.com"));
       setServerError(
-        `Unable to connect to the backend server (${API_URL}). Please verify that the backend server is running on port 8000.`
+        isRender
+          ? "Unable to connect to backend server. If the Render free tier was sleeping, it takes 30-60 seconds to wake up. Please wait a moment and click Sign In again."
+          : `Unable to connect to the backend server (${API_URL}). Please verify that the backend server is running on port 8000.`
       );
     }
   }

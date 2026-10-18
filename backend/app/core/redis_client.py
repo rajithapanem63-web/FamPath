@@ -25,10 +25,15 @@ _redis_client: Any = None
 def _try_connect_redis() -> Any:
     """Try to connect to Redis; return client or None."""
     global _redis_available, _redis_client
+    url = _settings.REDIS_URL
+    # If REDIS_URL is localhost or empty, avoid hanging or failing on cloud without local redis
+    if not url or "localhost" in url or "127.0.0.1" in url:
+        _redis_available = False
+        return None
     try:
         import redis.asyncio as aioredis  # type: ignore[import-untyped]
         pool = aioredis.ConnectionPool.from_url(
-            _settings.REDIS_URL, max_connections=20, decode_responses=True, socket_timeout=1
+            url, max_connections=20, decode_responses=True, socket_timeout=1
         )
         client = aioredis.Redis(connection_pool=pool)
         _redis_client = client
@@ -136,27 +141,48 @@ async def check_rate_limit(
     now = time.time()
     window_start = now - window_seconds
 
-    pipe = redis.pipeline()
-    pipe.zremrangebyscore(key, 0, window_start)
-    pipe.zadd(key, {str(now): now})
-    pipe.zcard(key)
-    pipe.expire(key, window_seconds)
-    results = await pipe.execute()
+    try:
+        pipe = redis.pipeline()
+        pipe.zremrangebyscore(key, 0, window_start)
+        pipe.zadd(key, {str(now): now})
+        pipe.zcard(key)
+        pipe.expire(key, window_seconds)
+        results = await pipe.execute()
 
-    count: int = results[2]
-    allowed = count <= max_attempts
-    remaining = max(0, max_attempts - count)
-    return allowed, remaining
+        count: int = results[2]
+        allowed = count <= max_attempts
+        remaining = max(0, max_attempts - count)
+        return allowed, remaining
+    except Exception:
+        # Fallback to in-memory store
+        pipe = _InMemoryRedis().pipeline()
+        pipe.zremrangebyscore(key, 0, window_start)
+        pipe.zadd(key, {str(now): now})
+        pipe.zcard(key)
+        pipe.expire(key, window_seconds)
+        results = await pipe.execute()
+        count = results[2]
+        return count <= max_attempts, max(0, max_attempts - count)
 
 
 async def cache_set(redis: Any, key: str, value: Any, ttl_seconds: int = 300) -> None:
-    await redis.set(key, json.dumps(value), ex=ttl_seconds)
+    try:
+        await redis.set(key, json.dumps(value), ex=ttl_seconds)
+    except Exception:
+        await _InMemoryRedis().set(key, json.dumps(value), ex=ttl_seconds)
 
 
 async def cache_get(redis: Any, key: str) -> Any | None:
-    raw = await redis.get(key)
-    return json.loads(raw) if raw is not None else None
+    try:
+        raw = await redis.get(key)
+        return json.loads(raw) if raw is not None else None
+    except Exception:
+        raw = await _InMemoryRedis().get(key)
+        return json.loads(raw) if raw is not None else None
 
 
 async def cache_delete(redis: Any, key: str) -> None:
-    await redis.delete(key)
+    try:
+        await redis.delete(key)
+    except Exception:
+        await _InMemoryRedis().delete(key)

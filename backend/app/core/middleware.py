@@ -39,12 +39,12 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         "Referrer-Policy": "strict-origin-when-cross-origin",
         "Permissions-Policy": "geolocation=(), camera=(), microphone=()",
         "Content-Security-Policy": (
-            "default-src 'self'; "
-            "script-src 'self'; "
-            "style-src 'self' 'unsafe-inline'; "
-            "img-src 'self' data:; "
-            "font-src 'self'; "
-            "connect-src 'self';"
+            "default-src 'self' https: http:; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; "
+            "style-src 'self' 'unsafe-inline' https:; "
+            "img-src 'self' data: https:; "
+            "font-src 'self' data: https:; "
+            "connect-src *;"
         ),
     }
 
