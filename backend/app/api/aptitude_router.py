@@ -24,9 +24,30 @@ from app.services.aptitude_service import (
     compute_riasec_scores as _compute_riasec_scores,
     format_top_branches as _format_top_branches,
 )
-
 router = APIRouter(prefix="/aptitude", tags=["Aptitude & Branch Fit"])
 public_router = APIRouter(prefix="/aptitude/public", tags=["Aptitude Public"])
+
+# ----- Response models -----
+class QuestionResponse(BaseModel):
+    id: uuid.UUID
+    text: str
+    options: list | None
+    riasec_dimension: str
+
+class StartSessionResponse(BaseModel):
+    session_id: uuid.UUID
+    questions: list[QuestionResponse]
+    total: int
+
+class SaveResponsesRequest(BaseModel):
+    responses: list[dict] = Field(min_length=1)
+
+class SubmitResponse(BaseModel):
+    riasec_scores: dict
+    branch_fit_scores: dict
+    top_branches: list
+
+
 
 
 class PublicAnswersRequest(BaseModel):
@@ -99,27 +120,7 @@ async def public_submit_quiz(
 
 
 
-class QuestionResponse(BaseModel):
-    id: uuid.UUID
-    text: str
-    options: list | None
-    riasec_dimension: str
 
-
-class StartSessionResponse(BaseModel):
-    session_id: uuid.UUID
-    questions: list[QuestionResponse]
-    total: int
-
-
-class SaveResponsesRequest(BaseModel):
-    responses: list[dict] = Field(min_length=1)
-
-
-class SubmitResponse(BaseModel):
-    riasec_scores: dict
-    branch_fit_scores: dict
-    top_branches: list
 
 
 @router.get("/questions", response_model=StartSessionResponse, summary="Start aptitude quiz")
