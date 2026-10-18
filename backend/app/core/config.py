@@ -7,7 +7,7 @@ from __future__ import annotations
 from functools import lru_cache
 from typing import Literal
 
-from pydantic import AnyHttpUrl, field_validator, model_validator
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -31,22 +31,23 @@ class Settings(BaseSettings):
 
     # ── Database ─────────────────────────────────────────────────────────────
     # Supports both SQLite (local) and PostgreSQL (production)
-    # Also accepts DATABASE_URL (Render's default env var name)
+    # DATABASE_URL is set automatically by Render (without FAMPATH_ prefix)
     DB_URL: str = "sqlite+aiosqlite:///./fampath_dev.db"
-    DATABASE_URL: str = ""  # Render sets this automatically
+    DATABASE_URL: str = ""  # Render sets this automatically (no prefix)
 
-    @model_validator(mode="after")
-    def resolve_db_url(self) -> "Settings":
-        """Use DATABASE_URL if DB_URL not explicitly set to postgres."""
-        if "sqlite" in self.DB_URL and self.DATABASE_URL:
-            # Convert postgres:// to postgresql+asyncpg://
-            db_url = self.DATABASE_URL
+    @classmethod
+    def settings_customise_sources(cls, settings_cls, init_settings, env_settings, dotenv_settings, secrets_settings):
+        """Also read DATABASE_URL without the FAMPATH_ prefix."""
+        import os
+        # Inject DATABASE_URL into env if FAMPATH_DB_URL is not set
+        db_url = os.environ.get("DATABASE_URL", "")
+        if db_url and not os.environ.get("FAMPATH_DB_URL"):
             if db_url.startswith("postgres://"):
                 db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
             elif db_url.startswith("postgresql://") and "+asyncpg" not in db_url:
                 db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-            self.DB_URL = db_url
-        return self
+            os.environ["FAMPATH_DB_URL"] = db_url
+        return init_settings, env_settings, dotenv_settings, secrets_settings
 
     # ── Redis (optional — gracefully degraded in dev) ─────────────────────────
     REDIS_URL: str = "redis://localhost:6379/0"
@@ -104,6 +105,8 @@ class Settings(BaseSettings):
     FEATURE_COUNSELLOR_BOOKING: bool = False
     FEATURE_WHATSAPP_MODE: bool = False
     FEATURE_CLAIM_VERIFIER: bool = False
+
+    # ── Validators ───────────────────────────────────────────────────────────
 
     @field_validator("ENCRYPTION_KEY")
     @classmethod
