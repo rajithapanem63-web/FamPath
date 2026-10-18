@@ -1,0 +1,53 @@
+services:
+  # Backend API
+  - type: web
+    name: fampath-backend
+    runtime: python
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: cd backend && pip install -r requirements.txt
+    startCommand: cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_VERSION
+        value: 0.1.0
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fampath-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://fampath-frontend.onrender.com
+      - key: SMTP_HOST
+        value: smtp.gmail.com
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_FROM_EMAIL
+        value: noreply@fampath.dev
+      - key: SMTP_FROM_NAME
+        value: FamPath
+    healthCheckPath: /health
+
+  # Frontend
+  - type: web
+    name: fampath-frontend
+    runtime: node
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm start
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        value: https://fampath-backend.onrender.com
+      - key: NODE_ENV
+        value: production
+
+databases:
+  - name: fampath-db
+    databaseName: fampath
+    user: fampath_user
+    plan: free
