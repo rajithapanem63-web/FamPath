@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Lint, Format & Type-Check on Save",
+      "trigger": "PostFileSave",
+      "description": "Run ruff/black/mypy on Python saves; eslint/prettier on TypeScript saves. Blocks on errors.",
+      "matcher": "\\.(py|ts|tsx|js|jsx|css)$",
+      "action": {
+        "type": "command",
+        "command": "node -e \"\nconst path = require('path');\nconst { execSync } = require('child_process');\nconst file = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).file || '';\nconst isPy = file.endsWith('.py');\nconst isTs = file.endsWith('.ts') || file.endsWith('.tsx');\ntry {\n  if (isPy) {\n    execSync('ruff check ' + file, {cwd: process.env.WORKSPACE_ROOT || '.', stdio:'pipe'});\n    execSync('black --check ' + file, {cwd: process.env.WORKSPACE_ROOT || '.', stdio:'pipe'});\n    execSync('mypy --strict ' + file, {cwd: process.env.WORKSPACE_ROOT || '.', stdio:'pipe'});\n    console.log('Python lint/format/typecheck passed: ' + file);\n  } else if (isTs) {\n    execSync('npx eslint ' + file, {cwd: (process.env.WORKSPACE_ROOT || '.') + '/frontend', stdio:'pipe'});\n    execSync('npx prettier --check ' + file, {cwd: (process.env.WORKSPACE_ROOT || '.') + '/frontend', stdio:'pipe'});\n    console.log('TS lint/format passed: ' + file);\n  }\n} catch(e) { process.stderr.write(e.stdout ? e.stdout.toString() : e.message); process.exit(2); }\n\"",
+        "timeout": 60
+      }
+    }
+  ]
+}

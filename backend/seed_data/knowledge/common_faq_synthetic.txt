@@ -1,0 +1,32 @@
+SYNTHETIC SEED DATA - NOT REAL OFFICIAL CONTENT
+Source: SEED_SYNTHETIC | Year: 2024
+
+FamPath Common FAQs (Synthetic Development Data)
+
+Q: What is the difference between AP EAPCET and TS EAPCET?
+A: AP EAPCET is for Andhra Pradesh state colleges and TS EAPCET is for Telangana state colleges. Both are separate examinations conducted by their respective state education authorities. A student can appear for both examinations separately.
+
+Q: Can I apply to colleges in both AP and Telangana with my rank?
+A: No. AP EAPCET rank is valid only for AP state counselling and TS EAPCET rank is valid only for TS state counselling. For national level colleges, you need JEE Main/Advanced rank.
+
+Q: What is the seat allotment process?
+A: During web counselling, students enter their college and branch preferences in order of priority. The system allots seats based on rank, category, and preference order. Higher-ranked students (lower rank number) get first preference.
+
+Q: What is the difference between opening rank and closing rank?
+A: Opening rank is the rank of the first student admitted to a particular college-branch-category combination. Closing rank is the rank of the last student admitted. If your rank is better than (lower number than) the closing rank, you have a chance of admission.
+
+Q: What does Safe, Target, and Dream mean in FamPath predictions?
+A: Safe means your rank is comfortably better than the historical closing rank for that college/branch/category — high probability of admission. Target means your rank is close to the closing rank — you may or may not get admission. Dream means the closing rank is typically better than your rank — lower probability but possible in different rounds.
+
+Q: How many rounds of counselling are there?
+A: Typically 3 rounds — Round 1, Round 2, and Spot Admission. Seats that remain unfilled after Round 2 are offered in Spot Admission on a first-come-first-served basis.
+
+Q: What documents do I need for counselling?
+A: You typically need your rank card, 10th and 12th certificates, study certificate, caste certificate (if applicable), income certificate (if applying for fee reimbursement), Aadhaar card, and passport-size photographs.
+
+Q: Can I change my branch after admission?
+A: Branch changes are allowed in some colleges after the first year, subject to availability of seats and minimum CGPA requirements. Check with your specific college's rules.
+
+IMPORTANT NOTE
+All information in these FAQs is SYNTHETIC SEED DATA for development purposes only.
+Always verify with official sources before making decisions.

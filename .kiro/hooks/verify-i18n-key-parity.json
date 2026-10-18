@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Verify i18n Key Parity (en / te / hi)",
+      "trigger": "PostFileSave",
+      "description": "Check that en.json, te.json, and hi.json all have identical key sets on every save of a translation file.",
+      "matcher": "frontend/src/i18n/messages/.*\\.json$",
+      "action": {
+        "type": "command",
+        "command": "node -e \"\nconst fs = require('fs');\nconst path = require('path');\nconst file = JSON.parse(fs.readFileSync('/dev/stdin','utf8')).file || '';\nif (!file.includes('/i18n/messages/')) process.exit(0);\nconst dir = path.dirname(file);\nconst locales = ['en', 'te', 'hi'];\nconst messages = {};\nlet error = false;\nfor (const locale of locales) {\n  const f = path.join(dir, locale + '.json');\n  if (!fs.existsSync(f)) { process.stderr.write('MISSING: ' + f + ' does not exist\\n'); error = true; continue; }\n  try { messages[locale] = JSON.parse(fs.readFileSync(f, 'utf8')); } \n  catch(e) { process.stderr.write('PARSE ERROR in ' + f + ': ' + e.message + '\\n'); error = true; }\n}\nfunction getKeys(obj, prefix) {\n  return Object.entries(obj).flatMap(([k, v]) =>\n    typeof v === 'object' && v !== null ? getKeys(v, prefix ? prefix+'.'+k : k) : [prefix ? prefix+'.'+k : k]\n  );\n}\nif (!error && messages['en']) {\n  const enKeys = new Set(getKeys(messages['en'], ''));\n  for (const locale of ['te', 'hi']) {\n    if (!messages[locale]) continue;\n    const lKeys = new Set(getKeys(messages[locale], ''));\n    const missing = [...enKeys].filter(k => !lKeys.has(k));\n    const extra = [...lKeys].filter(k => !enKeys.has(k));\n    if (missing.length) { process.stderr.write('MISSING keys in ' + locale + '.json: ' + missing.join(', ') + '\\n'); error = true; }\n    if (extra.length) { process.stderr.write('EXTRA keys in ' + locale + '.json (not in en.json): ' + extra.join(', ') + '\\n'); error = true; }\n  }\n}\nif (error) process.exit(2);\nconsole.log('i18n key parity check passed for all three locales.');\n\"",
+        "timeout": 15
+      }
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+SYNTHETIC SEED DATA - NOT REAL OFFICIAL CONTENT
+Source: SEED_SYNTHETIC | Year: 2024
+
+AP EAPCET Counselling Guide 2024 (Synthetic Development Data)
+
+OVERVIEW
+AP EAPCET (Andhra Pradesh Engineering, Agriculture and Pharmacy Common Entrance Test) is the state-level entrance examination for admission to engineering, agriculture, and pharmacy courses in Andhra Pradesh.
+
+ELIGIBILITY
+- Students must have passed 10+2 (Intermediate) with Physics, Chemistry, and Mathematics.
+- Minimum 45% marks in PCM for general category; 40% for SC/ST.
+- Must be a citizen of India and satisfy domicile requirements for AP state quota.
+
+SEAT CATEGORIES
+- State Quota: 85% of total seats are allocated to AP state candidates.
+- Management Quota: 15% of total seats.
+- NRI Quota: Separate allocation in private colleges.
+
+RANK CATEGORIES
+- OC: Open Category
+- BC-A, BC-B, BC-C, BC-D, BC-E: Backward Classes sub-categories
+- SC: Scheduled Castes
+- ST: Scheduled Tribes
+- EWS: Economically Weaker Sections (10% reservation)
+
+COUNSELLING ROUNDS (Synthetic 2024 Dates)
+- Round 1 Web Options Entry: July 15–20, 2024
+- Round 1 Allotment: July 25, 2024
+- Round 2 Web Options Entry: August 1–5, 2024
+- Round 2 Allotment: August 10, 2024
+- Round 3 (Spot Admission): August 20–25, 2024
+
+DOCUMENTS REQUIRED (General)
+- AP EAPCET Hall Ticket and Rank Card
+- 10th (SSC) Marks Memo and Certificate
+- 12th (Intermediate) Marks Memo
+- Study/Residence Certificate (to prove AP domicile)
+- Transfer Certificate (TC)
+- Conduct Certificate
+- Passport-size photographs (6 copies)
+- Aadhaar Card
+
+ADDITIONAL DOCUMENTS FOR RESERVED CATEGORIES
+- Caste Certificate (BC/SC/ST)
+- Income Certificate (for EWS and fee reimbursement)
+- BC/SC/ST Validity Certificate
+
+FEE REIMBURSEMENT
+- AP Government provides fee reimbursement for students with family income below ₹2.5 lakhs per annum in government colleges.
+- Students must apply for fee reimbursement through the AP government portal.
+
+IMPORTANT NOTE
+All dates, fee amounts, and rank cutoffs in this guide are SYNTHETIC SEED DATA for development purposes only. 
+Always verify with the official APSCHE website (apsche.ap.gov.in) for actual information.

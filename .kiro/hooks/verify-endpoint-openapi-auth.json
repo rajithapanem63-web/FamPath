@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Verify OpenAPI Docs & Auth Guard on New Endpoint",
+      "trigger": "PostFileSave",
+      "description": "Verify OpenAPI docs and auth guard exist on new or modified endpoint files.",
+      "matcher": "backend/app/api/.*_router\\.py$",
+      "action": {
+        "type": "agent",
+        "prompt": "A new API endpoint file has been created or saved. Before considering this task complete, verify the following:\n\n1. **OpenAPI documentation**: The endpoint function has a `summary`, `description`, and `response_model` defined in its decorator or docstring so it appears correctly in the auto-generated OpenAPI spec (`/docs`).\n2. **Auth guard**: The endpoint uses `Depends(require_role([...]))` or `Depends(get_current_user)` — no public endpoint should be intentionally unauthenticated unless it is explicitly listed in the public routes allowlist in `backend/app/core/security.py`.\n3. **Input validation**: The request body or query parameters use a Pydantic v2 schema, not raw dicts.\n4. **Error handling**: Common error paths (not found, forbidden, validation) return structured JSON responses using `HTTPException` with appropriate status codes.\n\nIf any of these are missing, flag them and add them before the task is marked done."
+      }
+    }
+  ]
+}

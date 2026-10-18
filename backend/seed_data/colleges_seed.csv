@@ -1,0 +1,11 @@
+college_code,name,state,district,city,college_type,affiliation,naac_grade,established_year,source,source_year
+SEED_JNTUH_HYD,JNTUH College of Engineering (SEED DATA),Telangana,Hyderabad,Hyderabad,government,JNTU Hyderabad,A,1972,SEED_SYNTHETIC,2024
+SEED_OSMANIA_HYD,Osmania University College of Engineering (SEED DATA),Telangana,Hyderabad,Hyderabad,government,Osmania University,A,1929,SEED_SYNTHETIC,2024
+SEED_CBIT_HYD,CBIT Hyderabad (SEED DATA),Telangana,Hyderabad,Hyderabad,private_aided,JNTU Hyderabad,A+,1979,SEED_SYNTHETIC,2024
+SEED_VNRVJIET_HYD,VNR VJIET Hyderabad (SEED DATA),Telangana,Hyderabad,Hyderabad,private_unaided,JNTU Hyderabad,A,1998,SEED_SYNTHETIC,2024
+SEED_VASAVI_HYD,Vasavi College of Engineering (SEED DATA),Telangana,Hyderabad,Hyderabad,private_aided,Osmania University,A+,1948,SEED_SYNTHETIC,2024
+SEED_JNTUA_ATP,JNTUA College of Engineering (SEED DATA),Andhra Pradesh,Anantapur,Anantapur,government,JNTU Anantapur,A,1946,SEED_SYNTHETIC,2024
+SEED_SVEC_ATP,SVEC Tirupati (SEED DATA),Andhra Pradesh,Chittoor,Tirupati,private_unaided,JNTU Anantapur,A,1981,SEED_SYNTHETIC,2024
+SEED_RGUKT_RKV,RGUKT Rkvalasa (SEED DATA),Andhra Pradesh,Vizianagaram,Vizianagaram,government,RGUKT,B+,2008,SEED_SYNTHETIC,2024
+SEED_MVGR_VZM,MVGR College of Engineering (SEED DATA),Andhra Pradesh,Vizianagaram,Vizianagaram,private_unaided,JNTU Kakinada,A,1997,SEED_SYNTHETIC,2024
+SEED_GITAM_VZG,GITAM University Vizag (SEED DATA),Andhra Pradesh,Visakhapatnam,Visakhapatnam,deemed,GITAM,A,1997,SEED_SYNTHETIC,2024

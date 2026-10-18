@@ -1,0 +1,142 @@
+[
+  {
+    "question_text": "I enjoy building and fixing things with my hands.",
+    "question_te": "నేను చేతులతో వస్తువులు నిర్మించడం మరియు రిపేర్ చేయడం ఆనందిస్తాను.",
+    "question_hi": "मुझे हाथों से चीजें बनाना और ठीक करना पसंद है।",
+    "riasec_dimension": "R",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I like working with tools, machines, or physical systems.",
+    "question_te": "నేను పరికరాలు, యంత్రాలు లేదా భౌతిక వ్యవస్థలతో పని చేయడం ఇష్టపడతాను.",
+    "question_hi": "मुझे उपकरणों, मशीनों या भौतिक प्रणालियों के साथ काम करना पसंद है।",
+    "riasec_dimension": "R",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I enjoy solving complex mathematical or scientific problems.",
+    "question_te": "నేను సంక్లిష్ట గణిత లేదా శాస్త్రీయ సమస్యలను పరిష్కరించడం ఆనందిస్తాను.",
+    "question_hi": "मुझे जटिल गणितीय या वैज्ञानिक समस्याओं को हल करना पसंद है।",
+    "riasec_dimension": "I",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I am curious about how technology works and enjoy researching it.",
+    "question_te": "సాంకేతికత ఎలా పని చేస్తుందో అనే విషయంపై నాకు ఆసక్తి ఉంది మరియు దాన్ని పరిశోధించడం నచ్చుతుంది.",
+    "question_hi": "मैं उत्सुक हूँ कि तकनीक कैसे काम करती है और इसे शोध करना पसंद है।",
+    "riasec_dimension": "I",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I enjoy programming computers or designing software.",
+    "question_te": "నేను కంప్యూటర్లను ప్రోగ్రామ్ చేయడం లేదా సాఫ్ట్‌వేర్ రూపకల్పన చేయడం ఆనందిస్తాను.",
+    "question_hi": "मुझे कंप्यूटर प्रोग्राम करना या सॉफ़्टवेयर डिजाइन करना पसंद है।",
+    "riasec_dimension": "I",
+    "weight": 1.2
+  },
+  {
+    "question_text": "I have a strong appreciation for art, music, or creative design.",
+    "question_te": "కళ, సంగీతం లేదా సృజనాత్మక రూపకల్పనపై నాకు బలమైన మెచ్చుకోలు ఉంది.",
+    "question_hi": "मुझे कला, संगीत, या रचनात्मक डिजाइन की गहरी सराहना है।",
+    "riasec_dimension": "A",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I enjoy designing visual or physical structures.",
+    "question_te": "దృశ్య లేదా భౌతిక నిర్మాణాలను రూపొందించడం నాకు నచ్చుతుంది.",
+    "question_hi": "मुझे दृश्य या भौतिक संरचनाएं डिजाइन करना पसंद है।",
+    "riasec_dimension": "A",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I enjoy helping others and working in team-oriented environments.",
+    "question_te": "ఇతరులకు సహాయం చేయడం మరియు జట్టు-ఆధారిత వాతావరణాలలో పని చేయడం నాకు నచ్చుతుంది.",
+    "question_hi": "मुझे दूसरों की मदद करना और टीम-उन्मुख वातावरण में काम करना पसंद है।",
+    "riasec_dimension": "S",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I am good at explaining things to others and teaching.",
+    "question_te": "ఇతరులకు విషయాలు వివరించడంలో మరియు బోధించడంలో నాకు నైపుణ్యం ఉంది.",
+    "question_hi": "मैं दूसरों को चीजें समझाने और पढ़ाने में अच्छा हूँ।",
+    "riasec_dimension": "S",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I enjoy taking the lead in group projects and motivating others.",
+    "question_te": "సమూహ ప్రాజెక్టులలో నాయకత్వం వహించడం మరియు ఇతరులను ప్రేరేపించడం నాకు నచ్చుతుంది.",
+    "question_hi": "मुझे समूह परियोजनाओं में नेतृत्व करना और दूसरों को प्रेरित करना पसंद है।",
+    "riasec_dimension": "E",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I am interested in starting a business or entrepreneurial ventures.",
+    "question_te": "నేను వ్యాపారం ప్రారంభించడం లేదా వ్యవస్థాపక కార్యక్రమాలలో ఆసక్తి కలిగి ఉన్నాను.",
+    "question_hi": "मुझे व्यवसाय शुरू करने या उद्यमिता में रुचि है।",
+    "riasec_dimension": "E",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I prefer working with well-defined systems, rules, and procedures.",
+    "question_te": "నేను సుస్పష్టంగా నిర్వచించిన వ్యవస్థలు, నియమాలు మరియు విధానాలతో పని చేయడానికి ఇష్టపడతాను.",
+    "question_hi": "मैं सुपरिभाषित प्रणालियों, नियमों और प्रक्रियाओं के साथ काम करना पसंद करता हूँ।",
+    "riasec_dimension": "C",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I am good at organising data and keeping detailed records.",
+    "question_te": "డేటాను నిర్వహించడంలో మరియు వివరమైన రికార్డులు ఉంచడంలో నాకు నైపుణ్యం ఉంది.",
+    "question_hi": "मैं डेटा व्यवस्थित करने और विस्तृत रिकॉर्ड रखने में अच्छा हूँ।",
+    "riasec_dimension": "C",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I enjoy working on large-scale infrastructure projects like roads or buildings.",
+    "question_te": "రోడ్లు లేదా భవనాలు వంటి పెద్ద-స్థాయి మౌలిక సదుపాయాల ప్రాజెక్టులపై పని చేయడం నాకు నచ్చుతుంది.",
+    "question_hi": "मुझे सड़कों या इमारतों जैसी बड़े पैमाने की बुनियादी ढांचा परियोजनाओं पर काम करना पसंद है।",
+    "riasec_dimension": "R",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I am fascinated by electronics, circuits, and how devices communicate.",
+    "question_te": "ఎలక్ట్రానిక్స్, సర్క్యూట్లు మరియు పరికరాలు ఎలా కమ్యూనికేట్ చేస్తాయో అనే విషయంలో నాకు ఆకర్షణ ఉంది.",
+    "question_hi": "मुझे इलेक्ट्रॉनिक्स, सर्किट और उपकरणों के संचार में दिलचस्पी है।",
+    "riasec_dimension": "I",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I enjoy applying chemistry or biology to solve real-world problems.",
+    "question_te": "వాస్తవ-ప్రపంచ సమస్యలను పరిష్కరించడానికి రసాయన శాస్త్రం లేదా జీవ శాస్త్రాన్ని వర్తింపజేయడం నాకు నచ్చుతుంది.",
+    "question_hi": "मुझे वास्तविक दुनिया की समस्याओं को हल करने के लिए रसायन विज्ञान या जीव विज्ञान लागू करना पसंद है।",
+    "riasec_dimension": "I",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I prefer structured work with clear outcomes and measurable results.",
+    "question_te": "స్పష్టమైన ఫలితాలు మరియు కొలవగలిగే ఫలితాలతో నిర్మాణాత్మక పని నాకు ఇష్టం.",
+    "question_hi": "मैं स्पष्ट परिणामों और मापनीय परिणामों के साथ संरचित काम पसंद करता हूँ।",
+    "riasec_dimension": "C",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I am interested in using technology to solve social or environmental problems.",
+    "question_te": "సామాజిక లేదా పర్యావరణ సమస్యలను పరిష్కరించడానికి సాంకేతికతను ఉపయోగించడంలో నాకు ఆసక్తి ఉంది.",
+    "question_hi": "मुझे सामाजिक या पर्यावरणीय समस्याओं को हल करने के लिए प्रौद्योगिकी का उपयोग करने में रुचि है।",
+    "riasec_dimension": "S",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I enjoy negotiating, persuading, and influencing decisions.",
+    "question_te": "చర్చలు జరపడం, ఒప్పించడం మరియు నిర్ణయాలను ప్రభావితం చేయడం నాకు నచ్చుతుంది.",
+    "question_hi": "मुझे बातचीत करना, मनाना और निर्णयों को प्रभावित करना पसंद है।",
+    "riasec_dimension": "E",
+    "weight": 1.0
+  },
+  {
+    "question_text": "I find it satisfying when creative ideas become tangible products or systems.",
+    "question_te": "సృజనాత్మక ఆలోచనలు స్పష్టమైన ఉత్పత్తులు లేదా వ్యవస్థలుగా మారినప్పుడు నాకు సంతోషంగా అనిపిస్తుంది.",
+    "question_hi": "जब रचनात्मक विचार मूर्त उत्पाद या प्रणाली बन जाते हैं तो मुझे संतुष्टि मिलती है।",
+    "riasec_dimension": "A",
+    "weight": 1.0
+  }
+]

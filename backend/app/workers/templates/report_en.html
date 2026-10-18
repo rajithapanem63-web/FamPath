@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>FamPath Decision Report</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 40px; color: #1a1a1a; }
+  h1 { color: #2563EB; border-bottom: 2px solid #2563EB; padding-bottom: 8px; }
+  h2 { color: #374151; margin-top: 32px; }
+  .section { margin-bottom: 24px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  th { background: #EFF6FF; color: #1D4ED8; padding: 8px 12px; text-align: left; }
+  td { padding: 8px 12px; border-bottom: 1px solid #E5E7EB; }
+  .score { font-size: 32px; font-weight: bold; color: #16A34A; }
+  .disclaimer { background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 12px; margin-top: 32px; font-size: 12px; }
+  .footer { color: #9CA3AF; font-size: 11px; margin-top: 40px; text-align: center; }
+</style>
+</head>
+<body>
+  <h1>FamPath – Family Decision Report</h1>
+  <p><strong>Family Workspace:</strong> {{ workspace_name }}</p>
+  <p><strong>Generated:</strong> {{ generated_at }}</p>
+
+  <div class="section">
+    <h2>Student Profile</h2>
+    <table>
+      <tr><th>Exam</th><td>{{ profile.exam_type }}</td></tr>
+      <tr><th>Category</th><td>{{ profile.category }}</td></tr>
+      <tr><th>Gender</th><td>{{ profile.gender }}</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Shortlisted Colleges</h2>
+    <p>{{ shortlist_count }} college(s) shortlisted. See the FamPath platform for full details.</p>
+  </div>
+
+  <div class="section">
+    <h2>Family Alignment Score</h2>
+    <p class="score">{{ alignment_score }} / 100</p>
+  </div>
+
+  <div class="disclaimer">
+    <strong>Disclaimer:</strong> {{ disclaimer }}
+  </div>
+
+  <div class="footer">
+    FamPath – AI-Enabled Family Decision-Support Platform &bull; fampath.in
+  </div>
+</body>
+</html>

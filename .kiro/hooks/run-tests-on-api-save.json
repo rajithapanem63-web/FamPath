@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Run Related Unit Tests on API Save",
+      "trigger": "PostFileSave",
+      "description": "Run domain-scoped pytest when an API router or service file is saved.",
+      "matcher": "backend/app/(api|services)/.*\\.py$",
+      "action": {
+        "type": "command",
+        "command": "node -e \"\nconst file = JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).file || '';\nconst isApiCode = file.includes('/api/') || file.includes('_router.py') || file.includes('_service.py');\nif (!isApiCode) process.exit(0);\nconst { execSync } = require('child_process');\nconst domain = file.match(/(\\w+)_(router|service)\\.py/);\nconst testPattern = domain ? 'backend/tests/**/*' + domain[1] + '*.py' : 'backend/tests/';\ntry {\n  execSync('pytest ' + testPattern + ' -x -q', {cwd: process.env.WORKSPACE_ROOT || '.', stdio:'pipe'});\n  console.log('Related unit tests passed for: ' + file);\n} catch(e) { process.stderr.write(e.stdout ? e.stdout.toString() : e.message); process.exit(1); }\n\"",
+        "timeout": 90
+      }
+    }
+  ]
+}

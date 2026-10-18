@@ -1,0 +1,49 @@
+=== 1. AUTH ===
+  [PASS] Token present
+  [PASS] Role = student
+  [PASS] Wrong password = 401
+  [PASS] No token = 401
+=== 2. WORKSPACE ===
+  [PASS] Workspace ID present
+  [PASS] Workspace has members
+  [PASS] Profile exam_type set
+=== 3. COLLEGE PREDICTION ===
+  [PASS] Results returned
+  [PASS] Safe band present
+  [PASS] Disclaimer per result
+  [PASS] SHAP factors present
+=== 4. APTITUDE QUIZ ===
+  [PASS] 20 questions
+  [PASS] 20 responses tracked
+  [PASS] RIASEC I score > 0
+  [PASS] Branch recs returned
+=== 5. FAMILY ALIGNMENT ===
+  [PASS] alignment_score key
+=== 6. PREFERENCES ===
+=== 7. COST & ROI ===
+  [PASS] Disclaimer present
+  [PASS] funding_gap present
+=== 8. SHORTLIST ===
+  [FAIL] Add to shortlist 201  ()
+  [FAIL] Item ID returned  ()
+  [PASS] Shortlist has items
+=== 9. TIMELINE & CHECKLIST ===
+=== 10. CHATBOT (RAG) ===
+  [FAIL] Send message 200  ()
+  [FAIL] Response not empty  ()
+  [FAIL] Citations field  ()
+  [FAIL] History has messages  ()
+=== 11. COLLEGE COMPARE ===
+  [PASS] 2 colleges returned
+  [PASS] Disclaimer present
+  [PASS] Insights returned
+=== 12. CAREER ROADMAP ===
+  [PASS] available_options key
+  [PASS] Skills returned
+  [PASS] Roadmap stages
+=== 13. ADMIN RBAC ===
+  [PASS] Admin 403 for student
+  [PASS] Freshness 403 for student
+=== 14. HEALTH ===
+  [PASS] Redis ok
+  [PASS] ML model

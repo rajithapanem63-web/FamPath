@@ -1,0 +1,48 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: "Commit SHA to deploy (defaults to latest main)"
+        required: false
+        type: string
+
+jobs:
+  deploy-prod:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    environment: production  # requires manual approval in GitHub Environments
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.sha || github.sha }}
+
+      - name: Confirm deployment
+        run: |
+          echo "Deploying commit ${{ inputs.sha || github.sha }} to PRODUCTION"
+          echo "This environment requires manual approval."
+
+      - name: Run DB migrations (production)
+        env:
+          FAMPATH_DB_URL: ${{ secrets.PROD_DB_URL }}
+        run: |
+          docker build -t fampath-backend:prod-${{ github.sha }} backend/
+          docker run --rm \
+            -e FAMPATH_DB_URL="$FAMPATH_DB_URL" \
+            -e FAMPATH_SECRET_KEY="${{ secrets.PROD_SECRET_KEY }}" \
+            -e FAMPATH_ENCRYPTION_KEY="${{ secrets.PROD_ENCRYPTION_KEY }}" \
+            -e FAMPATH_REDIS_URL="${{ secrets.PROD_REDIS_URL }}" \
+            -e FAMPATH_APP_ENV=production \
+            -e FAMPATH_LLM_PROVIDER=anthropic \
+            fampath-backend:prod-${{ github.sha }} \
+            alembic upgrade head
+
+      - name: Deploy to production
+        run: echo "Deploy to production — configure your deployment target here"
+
+      - name: Tag release
+        run: |
+          git tag -a "release-$(date +%Y%m%d-%H%M)" -m "Production deploy ${{ github.sha }}"
+          git push origin --tags || true

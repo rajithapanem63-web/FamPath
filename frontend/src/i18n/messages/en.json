@@ -1,0 +1,436 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "loading": "Loading…",
+    "error": "Something went wrong",
+    "retry": "Try again",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "yes": "Yes",
+    "no": "No",
+    "close": "Close",
+    "edit": "Edit",
+    "delete": "Delete",
+    "remove": "Remove",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "download": "Download",
+    "estimate_disclaimer": "Estimate based on historical data — not a guarantee.",
+    "data_source": "Data source",
+    "data_year": "Data year",
+    "verified": "Verified",
+    "unverified": "Unverified",
+    "synthetic": "Synthetic (dev data)",
+    "required": "Required"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "predict": "College Predictor",
+    "aptitude": "Aptitude Quiz",
+    "alignment": "Family Alignment",
+    "shortlist": "Shortlist",
+    "cost": "Cost & ROI",
+    "chatbot": "Ask FamPath",
+    "timeline": "Timeline",
+    "admin": "Admin",
+    "profile": "Profile",
+    "signOut": "Sign out",
+    "signIn": "Sign in"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Sign in to FamPath",
+      "subtitle": "AI-powered engineering college guidance",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@example.com",
+      "passwordLabel": "Password",
+      "submitButton": "Sign in",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account?",
+      "signUpLink": "Sign up",
+      "errors": {
+        "INVALID_CREDENTIALS": "Invalid email or password",
+        "ACCOUNT_LOCKED": "Account locked. Check your email to unlock.",
+        "EMAIL_NOT_VERIFIED": "Please verify your email first",
+        "RATE_LIMIT_EXCEEDED": "Too many attempts. Please wait 15 minutes."
+      }
+    },
+    "signUp": {
+      "title": "Create your FamPath account",
+      "fullNameLabel": "Full name",
+      "emailLabel": "Email address",
+      "passwordLabel": "Password",
+      "passwordHint": "At least 8 characters, 1 uppercase, 1 number",
+      "roleLabel": "I am a",
+      "roleStudent": "Student",
+      "roleParent": "Parent / Guardian",
+      "roleCounsellor": "Counsellor",
+      "localeLabel": "Preferred language",
+      "submitButton": "Create account",
+      "haveAccount": "Already have an account?",
+      "signInLink": "Sign in",
+      "successMessage": "Account created! Check your email to verify.",
+      "errors": {
+        "EMAIL_ALREADY_REGISTERED": "This email is already registered"
+      }
+    },
+    "verifyEmail": {
+      "title": "Verify your email",
+      "successMessage": "Email verified! You can now sign in.",
+      "expiredMessage": "This verification link has expired.",
+      "resendButton": "Resend verification email"
+    },
+    "forgotPassword": {
+      "title": "Reset your password",
+      "emailLabel": "Email address",
+      "submitButton": "Send reset link",
+      "successMessage": "If an account exists, a reset link has been sent."
+    },
+    "resetPassword": {
+      "title": "Set new password",
+      "passwordLabel": "New password",
+      "submitButton": "Reset password",
+      "successMessage": "Password reset! You can now sign in."
+    }
+  },
+  "workspace": {
+    "create": {
+      "title": "Create your Family Workspace",
+      "subtitle": "Invite your parents and make your college decision together.",
+      "nameLabel": "Workspace name",
+      "namePlaceholder": "e.g. The Sharma Family",
+      "submitButton": "Create workspace"
+    },
+    "dashboard": {
+      "title": "Family Workspace",
+      "members": "Members",
+      "inviteButton": "Invite family member",
+      "noMembers": "No other members yet. Invite your parents!"
+    },
+    "invite": {
+      "title": "Invite a family member",
+      "emailLabel": "Email address",
+      "roleLabel": "Role",
+      "roleParent": "Parent / Guardian",
+      "roleCounsellor": "Counsellor",
+      "submitButton": "Send invitation",
+      "successMessage": "Invitation sent!"
+    },
+    "consent": {
+      "title": "Data sharing consent",
+      "description": "To collaborate on college decisions, your profile data will be shared with other members of this workspace. The FamPath chatbot may use anonymised data to provide recommendations.",
+      "agreeButton": "I agree and join the workspace",
+      "declineButton": "Decline"
+    },
+    "members": {
+      "owner": "Owner",
+      "student": "Student",
+      "parent": "Parent",
+      "counsellor": "Counsellor",
+      "consentGiven": "Consent given",
+      "pendingConsent": "Pending consent",
+      "removeButton": "Remove member"
+    }
+  },
+  "profile": {
+    "title": "Your Profile",
+    "studentSection": "Academic details",
+    "parentSection": "Expectations & priorities",
+    "examType": "Entrance exam",
+    "rank": "Rank",
+    "rankPlaceholder": "Enter your rank",
+    "category": "Category",
+    "gender": "Gender",
+    "homeDistrict": "Home district",
+    "homeState": "Home state",
+    "budgetMin": "Minimum annual budget (₹)",
+    "budgetMax": "Maximum annual budget (₹)",
+    "saveButton": "Save profile",
+    "successMessage": "Profile saved!",
+    "completionIndicator": "Profile {pct}% complete"
+  },
+  "prediction": {
+    "title": "Find Colleges That Match Your Rank",
+    "subtitle": "Enter your entrance exam details to discover colleges where you have strong, realistic, or aspirational chances of admission.",
+    "examLabel": "Entrance Exam",
+    "rankLabel": "Your Rank",
+    "rankPlaceholder": "e.g. 5000",
+    "categoryLabel": "Reservation Category",
+    "genderLabel": "Gender",
+    "predictButton": "Find My Colleges",
+    "filterBranch": "Filter by engineering branch",
+    "filterDistrict": "Filter by location",
+    "filterType": "Filter by college type",
+    "budgetFilter": "Show only within budget",
+    "explainCategories": {
+      "title": "Understanding Admission Categories",
+      "safeTitle": "Safe Choice",
+      "safeDesc": "Your rank is significantly better than the historical closing rank. You have a strong chance of admission.",
+      "targetTitle": "Target Choice",
+      "targetDesc": "Your rank is competitive with the historical cutoff. Admission is realistic but not guaranteed.",
+      "dreamTitle": "Dream Choice",
+      "dreamDesc": "Your rank is below the historical closing rank. Admission may be more challenging, but not impossible."
+    },
+    "resultCard": {
+      "safeLabel": "Safe Choice",
+      "targetLabel": "Target Choice",
+      "dreamLabel": "Dream Choice",
+      "admissionOutlook": "Admission Outlook",
+      "strongChance": "Strong chance of admission",
+      "competitive": "Competitive — realistic option",
+      "challenging": "More challenging — aspirational",
+      "historicalClosingRank": "Historical Closing Rank",
+      "dataYear": "Cutoff Data Year",
+      "location": "Location",
+      "branches": "Available Branches",
+      "dataSource": "Data Source",
+      "disclaimer": "These are estimates based on historical data, not guarantees of admission.",
+      "whyThisBand": "Why is this college in this category?",
+      "addToShortlist": "Add to Shortlist",
+      "viewDetails": "View College Details",
+      "compare": "Compare"
+    },
+    "summary": {
+      "title": "Your Results Summary",
+      "safe": "{count} Safe Options",
+      "target": "{count} Target Options",
+      "dream": "{count} Dream Options"
+    },
+    "noResults": "No colleges match your criteria. Try adjusting your filters or selecting a different exam.",
+    "insufficientData": "Insufficient data to estimate admission outlook for this combination.",
+    "modelVersion": "Prediction Method",
+    "dataYearRange": "Based on historical cutoff data"
+  },
+  "aptitude": {
+    "title": "Branch Interest Quiz",
+    "subtitle": "Answer 15–20 questions to discover which engineering branches suit you best.",
+    "startButton": "Start Quiz",
+    "loading": "Loading…",
+    "question": "Question {current} of {total}",
+    "progressHelp": "Answer each question honestly — there are no right or wrong answers",
+    "scaleLabels": {
+      "1": "Strongly disagree",
+      "2": "Disagree",
+      "3": "Neutral",
+      "4": "Agree",
+      "5": "Strongly agree"
+    },
+    "nextButton": "Next",
+    "previousButton": "Previous",
+    "reviewButton": "Review Answers",
+    "submitButton": "See My Results",
+    "answerRequired": "Please select an answer to continue",
+    "resumeBanner": "You already took this quiz. Start a new one or view your previous results.",
+    "viewPreviousButton": "View Previous Results",
+    "continueButton": "Continue quiz",
+    "hero": {
+      "title": "Discover Your Perfect Engineering Branch",
+      "description": "Answer questions about your interests, strengths, and preferences to discover engineering branches that may suit you best."
+    },
+    "welcome": {
+      "title": "What to Expect",
+      "subtitle": "This quiz will help you understand which engineering branches align with your personality and interests.",
+      "duration": "10–15 Minutes",
+      "durationDesc": "Complete at your own pace",
+      "analysis": "Personalized Analysis",
+      "analysisDesc": "Based on RIASEC model",
+      "recommendations": "Branch Matches",
+      "recommendationsDesc": "See your top 3 fits"
+    },
+    "process": {
+      "title": "How It Works",
+      "subtitle": "Four simple steps to discover your best-fit engineering branches",
+      "step1": "Explore Your Interests",
+      "step1Desc": "We'll ask about activities you enjoy",
+      "step2": "Answer Questions",
+      "step2Desc": "15–20 questions, no right or wrong answers",
+      "step3": "Discover Your Profile",
+      "step3Desc": "See your unique interest pattern",
+      "step4": "Get Recommendations",
+      "step4Desc": "Find branches that match your strengths"
+    },
+    "branches": {
+      "title": "Engineering Branches We Cover",
+      "subtitle": "Learn what each branch is about before taking the quiz",
+      "cse": {
+        "name": "Computer Science & Engineering",
+        "desc": "Software, apps, algorithms, and solving problems with code. Great for logical thinkers who love technology."
+      },
+      "aids": {
+        "name": "AI & Data Science",
+        "desc": "Machine learning, data analysis, and building intelligent systems. Perfect for math lovers curious about the future."
+      },
+      "ece": {
+        "name": "Electronics & Communication",
+        "desc": "Circuits, wireless tech, and communication systems. Ideal for those interested in how devices connect and work."
+      },
+      "eee": {
+        "name": "Electrical & Electronics",
+        "desc": "Power systems, motors, and energy solutions. Suited for students interested in electricity and innovation."
+      },
+      "mech": {
+        "name": "Mechanical Engineering",
+        "desc": "Machines, engines, robotics, and manufacturing. Best for hands-on learners who enjoy building and fixing things."
+      },
+      "civil": {
+        "name": "Civil Engineering",
+        "desc": "Buildings, bridges, roads, and infrastructure. Great for those who want to shape the physical world around us."
+      }
+    },
+    "cta": {
+      "ready": "Ready to discover your best-fit engineering branch?",
+      "time": "Takes just 10–15 minutes"
+    },
+    "review": {
+      "title": "Review Your Answers",
+      "subtitle": "Check your responses before submitting. You can go back and change any answer.",
+      "answered": "Answered",
+      "unanswered": "Unanswered",
+      "warning": "You haven't answered all questions. Click below to jump to unanswered questions:",
+      "backButton": "Back to Quiz",
+      "submitting": "Computing Results…"
+    },
+    "results": {
+      "title": "Your Branch Fit Results",
+      "subtitle": "Based on your responses, here are the engineering branches that best match your interests and strengths.",
+      "riasecTitle": "Your Interest Profile",
+      "riasecDesc": "Based on the RIASEC model of career interests",
+      "branchFitTitle": "Branch Compatibility Scores",
+      "branchFitDesc": "How well each branch aligns with your profile",
+      "topBranchesTitle": "Your Top Recommended Branches",
+      "topBranchesDesc": "These branches align best with your interests and strengths",
+      "matchExplanation": "This branch matches your {drivers} interests.",
+      "score": "{score} / 100",
+      "drivers": "Driven by: {dims}",
+      "retakeButton": "Retake Quiz",
+      "viewPrediction": "See College Predictions"
+    }
+  },
+  "alignment": {
+    "title": "Family Alignment Dashboard",
+    "subtitle": "See how your preferences align with your family's.",
+    "alignmentScore": "Family Alignment Score",
+    "bothNeeded": "Both student and parent need to submit preferences to see alignment.",
+    "studentPrefs": "Student preferences",
+    "parentPrefs": "Parent preferences",
+    "agree": "Agree",
+    "conflict": "Conflict",
+    "mediateButton": "Get AI mediation",
+    "mediationTitle": "AI Mediation",
+    "studentSummary": "Student's perspective",
+    "parentSummary": "Parent's perspective",
+    "compromises": "Possible compromises",
+    "citations": "Sources",
+    "submitPrefsButton": "Submit my preferences",
+    "dimensions": {
+      "branch_interest": "Branch preference",
+      "location_flexibility": "Location flexibility",
+      "budget_priority": "Budget priority",
+      "placement_focus": "Placement focus",
+      "higher_education": "Higher education",
+      "job_stability": "Job stability",
+      "startup_openness": "Startup openness",
+      "prestige_weight": "College prestige"
+    }
+  },
+  "cost": {
+    "title": "Cost & ROI",
+    "totalCost": "Total 4-year cost",
+    "annualBreakdown": "Annual fee breakdown",
+    "tuition": "Tuition",
+    "hostel": "Hostel",
+    "transport": "Transport",
+    "other": "Other fees",
+    "scholarships": "Scholarships",
+    "eligibleScholarships": "You may be eligible for",
+    "noScholarships": "No matching scholarships found",
+    "loanCalculator": "Education loan calculator",
+    "loanAmount": "Loan amount (₹)",
+    "interestRate": "Interest rate (%)",
+    "tenure": "Repayment tenure (months)",
+    "monthlyEmi": "Monthly EMI",
+    "paybackPeriod": "Payback period",
+    "paybackMonths": "{months} months at 30% of salary",
+    "roiTitle": "Return on Investment",
+    "medianSalary": "Median placement salary",
+    "placementYear": "Placement data year",
+    "disclaimer": "Estimate only. Fees and placements may change. Verify directly with the institution.",
+    "budgetSafeToggle": "Show only colleges within budget"
+  },
+  "chatbot": {
+    "title": "Ask FamPath",
+    "placeholder": "Ask about colleges, branches, counselling rules…",
+    "sendButton": "Send",
+    "consentTitle": "Enable FamPath AI Assistant",
+    "consentDescription": "To answer your questions, FamPath will send your query to an AI model. No personal data (name, rank, income) is shared without your consent.",
+    "consentButton": "I understand, enable chatbot",
+    "citedFrom": "Based on",
+    "refusedMessage": "I don't have sufficient information to answer that reliably. Please check official sources.",
+    "languageLabel": "Language",
+    "typingIndicator": "FamPath is thinking…"
+  },
+  "shortlist": {
+    "title": "My Shortlist",
+    "addButton": "Add college",
+    "empty": "Your shortlist is empty. Add colleges from the predictor.",
+    "votes": "votes",
+    "commentPlaceholder": "Add a comment…",
+    "thumbsUp": "Good choice",
+    "thumbsDown": "Not sure",
+    "markFinal": "Mark as final decision",
+    "finalBadge": "Final Choice",
+    "removeButton": "Remove",
+    "viewCost": "View cost",
+    "limit": "Maximum 20 colleges in shortlist",
+    "decisionLog": "Decision history",
+    "noLog": "No decision history yet."
+  },
+  "timeline": {
+    "title": "Counselling Timeline",
+    "daysLeft": "{days} days left",
+    "overdue": "Past",
+    "noEvents": "No upcoming events for your exam type.",
+    "checklistTitle": "Document Checklist",
+    "mandatory": "Required",
+    "optional": "Optional",
+    "completed": "Done",
+    "pending": "Pending",
+    "markDone": "Mark as done"
+  },
+  "report": {
+    "downloadButton": "Download Decision Report (PDF)",
+    "generating": "Generating report…",
+    "ready": "Report ready!",
+    "error": "Report generation failed. Please try again."
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "colleges": "Colleges",
+    "import": "Import Data",
+    "freshness": "Data Freshness",
+    "questions": "Question Bank",
+    "stale": "Stale (> 1 year)",
+    "fresh": "Fresh",
+    "uploadButton": "Upload CSV",
+    "importStatus": "Import status",
+    "imported": "Imported",
+    "skipped": "Skipped",
+    "errors": "Errors",
+    "viewErrors": "View error report"
+  },
+  "errors": {
+    "WORKSPACE_NOT_FOUND": "Workspace not found",
+    "MEMBER_NOT_FOUND": "Member not found",
+    "SESSION_NOT_FOUND": "Session not found",
+    "PROFILE_NOT_FOUND": "Profile not found",
+    "ITEM_NOT_FOUND": "Item not found",
+    "SHORTLIST_LIMIT_REACHED": "Shortlist limit of 20 reached",
+    "CHATBOT_CONSENT_REQUIRED": "Please enable the chatbot first",
+    "INTERNAL_SERVER_ERROR": "Something went wrong. Please try again.",
+    "NETWORK_ERROR": "Network error. Please check your connection."
+  }
+}
