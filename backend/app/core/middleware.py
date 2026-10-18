@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import time
 import uuid
+from typing import Any
 
 import structlog
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -76,7 +77,3 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
             client_ip=request.client.host if request.client else "unknown",
         )
         return response
-
-
-# Import Any type for middleware dispatch signatures
-from typing import Any  # noqa: E402
