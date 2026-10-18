@@ -31,7 +31,22 @@ class Settings(BaseSettings):
 
     # ── Database ─────────────────────────────────────────────────────────────
     # Supports both SQLite (local) and PostgreSQL (production)
+    # Also accepts DATABASE_URL (Render's default env var name)
     DB_URL: str = "sqlite+aiosqlite:///./fampath_dev.db"
+    DATABASE_URL: str = ""  # Render sets this automatically
+
+    @model_validator(mode="after")
+    def resolve_db_url(self) -> "Settings":
+        """Use DATABASE_URL if DB_URL not explicitly set to postgres."""
+        if "sqlite" in self.DB_URL and self.DATABASE_URL:
+            # Convert postgres:// to postgresql+asyncpg://
+            db_url = self.DATABASE_URL
+            if db_url.startswith("postgres://"):
+                db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+            elif db_url.startswith("postgresql://") and "+asyncpg" not in db_url:
+                db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+            self.DB_URL = db_url
+        return self
 
     # ── Redis (optional — gracefully degraded in dev) ─────────────────────────
     REDIS_URL: str = "redis://localhost:6379/0"

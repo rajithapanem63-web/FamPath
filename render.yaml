@@ -18,6 +18,10 @@ services:
         fromDatabase:
           name: fampath-db
           property: connectionString
+      - key: DATABASE_URL
+        fromDatabase:
+          name: fampath-db
+          property: connectionString
       - key: FAMPATH_SECRET_KEY
         generateValue: true
       - key: FAMPATH_CORS_ORIGINS

@@ -1,4 +1,4 @@
-﻿"""
+"""
 FamPath FastAPI application entry point.
 """
 from __future__ import annotations
@@ -49,12 +49,14 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     )
     logger.info("fampath_starting", env=settings.APP_ENV, version=settings.APP_VERSION)
 
-    # Auto-create tables for SQLite local dev
-    if settings.is_sqlite:
-        from app.core.database import create_all_tables
-        import app.models  # noqa: F401 â€” register all models
+    # Auto-create tables on startup (works for both SQLite and PostgreSQL)
+    from app.core.database import create_all_tables
+    import app.models  # noqa: F401 - register all models
+    try:
         await create_all_tables()
-        logger.info("sqlite_tables_created")
+        logger.info("database_tables_ready")
+    except Exception as e:
+        logger.warning("table_creation_warning", error=str(e))
 
     # Sentry (optional)
     if settings.SENTRY_DSN:
@@ -172,4 +174,3 @@ def create_app() -> FastAPI:
 
 
 app = create_app()
-
