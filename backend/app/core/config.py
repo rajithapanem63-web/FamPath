@@ -95,22 +95,20 @@ class Settings(BaseSettings):
     LOG_LEVEL: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
 
     # ── CORS ──────────────────────────────────────────────────────────────────
-    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:3001"]
+    # Stored as comma-separated string; use cors_origins_list property to get list
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:3001"
 
-    @field_validator("CORS_ORIGINS", mode="before")
-    @classmethod
-    def parse_cors_origins(cls, v: object) -> list[str]:
-        """Accept both JSON array and comma-separated string."""
-        if isinstance(v, list):
-            return v
-        if isinstance(v, str):
-            v = v.strip()
-            if v.startswith("["):
-                import json
+    @property
+    def cors_origins_list(self) -> list[str]:
+        """Parse CORS_ORIGINS string into a list."""
+        v = self.CORS_ORIGINS.strip()
+        if v.startswith("["):
+            import json
+            try:
                 return json.loads(v)
-            # Comma-separated: "https://a.com,https://b.com"
-            return [origin.strip() for origin in v.split(",") if origin.strip()]
-        return [str(v)]
+            except Exception:
+                pass
+        return [origin.strip() for origin in v.split(",") if origin.strip()]
 
     # ── Rate limits ───────────────────────────────────────────────────────────
     AUTH_RATE_LIMIT_ATTEMPTS: int = 10
