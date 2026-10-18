@@ -4,6 +4,7 @@ All values come from environment variables or a .env file at the repo root.
 """
 from __future__ import annotations
 
+import os
 from functools import lru_cache
 from typing import Literal
 
@@ -11,10 +12,34 @@ from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
+def _resolve_database_url() -> str:
+    """
+    Resolve the database URL at module load time.
+    Render provides DATABASE_URL without the FAMPATH_ prefix.
+    We accept both FAMPATH_DB_URL and DATABASE_URL.
+    """
+    # First check FAMPATH_DB_URL (explicit override)
+    db_url = os.environ.get("FAMPATH_DB_URL", "")
+    if db_url:
+        return db_url
+
+    # Fall back to DATABASE_URL (set by Render automatically)
+    db_url = os.environ.get("DATABASE_URL", "")
+    if db_url:
+        # Convert postgres:// -> postgresql+asyncpg:// for async SQLAlchemy
+        if db_url.startswith("postgres://"):
+            db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
+        elif db_url.startswith("postgresql://") and "+asyncpg" not in db_url:
+            db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return db_url
+
+    # Default: SQLite for local development
+    return "sqlite+aiosqlite:///./fampath_dev.db"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="FAMPATH_",
-        # Look for .env in backend/ first, then repo root
         env_file=["../.env", ".env"],
         env_file_encoding="utf-8",
         case_sensitive=False,
@@ -30,26 +55,10 @@ class Settings(BaseSettings):
     ENCRYPTION_KEY: str = "0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b"
 
     # ── Database ─────────────────────────────────────────────────────────────
-    # Supports both SQLite (local) and PostgreSQL (production)
-    # DATABASE_URL is set automatically by Render (without FAMPATH_ prefix)
-    DB_URL: str = "sqlite+aiosqlite:///./fampath_dev.db"
-    DATABASE_URL: str = ""  # Render sets this automatically (no prefix)
+    # Resolved at module load: accepts FAMPATH_DB_URL or DATABASE_URL (Render)
+    DB_URL: str = _resolve_database_url()
 
-    @classmethod
-    def settings_customise_sources(cls, settings_cls, init_settings, env_settings, dotenv_settings, secrets_settings):
-        """Also read DATABASE_URL without the FAMPATH_ prefix."""
-        import os
-        # Inject DATABASE_URL into env if FAMPATH_DB_URL is not set
-        db_url = os.environ.get("DATABASE_URL", "")
-        if db_url and not os.environ.get("FAMPATH_DB_URL"):
-            if db_url.startswith("postgres://"):
-                db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
-            elif db_url.startswith("postgresql://") and "+asyncpg" not in db_url:
-                db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
-            os.environ["FAMPATH_DB_URL"] = db_url
-        return init_settings, env_settings, dotenv_settings, secrets_settings
-
-    # ── Redis (optional — gracefully degraded in dev) ─────────────────────────
+    # ── Redis ─────────────────────────────────────────────────────────────────
     REDIS_URL: str = "redis://localhost:6379/0"
 
     # ── JWT ───────────────────────────────────────────────────────────────────
