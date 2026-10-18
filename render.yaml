@@ -25,7 +25,7 @@ services:
       - key: FAMPATH_SECRET_KEY
         generateValue: true
       - key: FAMPATH_CORS_ORIGINS
-        value: https://fampath-frontend.onrender.com
+        value: "https://fampath-frontend.onrender.com,http://localhost:3000,http://localhost:3001"
       - key: FAMPATH_SMTP_HOST
         value: smtp.gmail.com
       - key: FAMPATH_SMTP_PORT
