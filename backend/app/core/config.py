@@ -17,16 +17,16 @@ def _resolve_database_url() -> str:
     Resolve the database URL at module load time.
     Render provides DATABASE_URL without the FAMPATH_ prefix.
     We accept both FAMPATH_DB_URL and DATABASE_URL.
+    Also handles URL conversion to async drivers.
     """
     # First check FAMPATH_DB_URL (explicit override)
     db_url = os.environ.get("FAMPATH_DB_URL", "")
-    if db_url:
-        return db_url
+    if not db_url:
+        # Fall back to DATABASE_URL (set by Render automatically)
+        db_url = os.environ.get("DATABASE_URL", "")
 
-    # Fall back to DATABASE_URL (set by Render automatically)
-    db_url = os.environ.get("DATABASE_URL", "")
     if db_url:
-        # Convert postgres:// -> postgresql+asyncpg:// for async SQLAlchemy
+        # Convert to async driver format
         if db_url.startswith("postgres://"):
             db_url = db_url.replace("postgres://", "postgresql+asyncpg://", 1)
         elif db_url.startswith("postgresql://") and "+asyncpg" not in db_url:
