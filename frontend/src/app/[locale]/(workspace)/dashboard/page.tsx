@@ -8,6 +8,10 @@ import { useWorkspaceStore } from "@/stores/workspaceStore";
 import { get, post, put } from "@/lib/api";
 import { Link } from "@/i18n/routing";
 import { getInitials, cn } from "@/lib/utils";
+import {
+  RadarChart, PolarGrid, PolarAngleAxis, Radar,
+  ResponsiveContainer, Tooltip, BarChart, Bar, XAxis, YAxis, Cell
+} from "recharts";
 
 interface WorkspaceMember {
   user_id: string;
@@ -108,6 +112,14 @@ export default function DashboardPage() {
     queryKey: ["career-roadmap", workspace?.id],
     queryFn: () => get<CareerRoadmapResponse>(`/career-roadmap/${workspace?.id}`),
     enabled: !!workspace?.id,
+  });
+
+  // Alignment Score Query
+  const { data: alignmentData } = useQuery<{ alignment_score: number | null; dimension_scores: Record<string, number> | null }>({
+    queryKey: ["alignment", workspace?.id],
+    queryFn: () => get(`/alignment/${workspace?.id}`),
+    enabled: !!workspace?.id,
+    retry: false,
   });
 
   // Create Workspace Mutation
@@ -300,6 +312,63 @@ export default function DashboardPage() {
           </Link>
         ))}
       </div>
+
+      {/* FAMILY ALIGNMENT CHART */}
+      {alignmentData && (
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-4">
+          <div className="flex items-center gap-2 border-b pb-4">
+            <span className="text-2xl">🤝</span>
+            <div>
+              <h2 className="text-lg font-bold text-gray-900">Family Alignment</h2>
+              <p className="text-xs text-muted-foreground">How well your family agrees on college priorities</p>
+            </div>
+            {alignmentData.alignment_score != null && (
+              <div className="ml-auto text-right">
+                <p className="text-2xl font-bold text-brand-600">{Math.round(alignmentData.alignment_score)}%</p>
+                <p className="text-xs text-muted-foreground">Alignment Score</p>
+              </div>
+            )}
+          </div>
+
+          {alignmentData.dimension_scores && Object.keys(alignmentData.dimension_scores).length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Bar chart */}
+              <div>
+                <p className="text-xs font-semibold text-gray-600 mb-3">Dimension Scores</p>
+                <ResponsiveContainer width="100%" height={200}>
+                  <BarChart data={Object.entries(alignmentData.dimension_scores).map(([k, v]) => ({ name: k.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()).slice(0, 12), score: Math.round(v) }))}>
+                    <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                    <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
+                    <Tooltip />
+                    <Bar dataKey="score" radius={[4, 4, 0, 0]}>
+                      {Object.entries(alignmentData.dimension_scores).map((_, i) => (
+                        <Cell key={i} fill={i % 2 === 0 ? "#2563eb" : "#7c3aed"} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              {/* Radar chart */}
+              <div>
+                <p className="text-xs font-semibold text-gray-600 mb-3">Alignment Radar</p>
+                <ResponsiveContainer width="100%" height={200}>
+                  <RadarChart data={Object.entries(alignmentData.dimension_scores).map(([k, v]) => ({ subject: k.replace(/_/g, " ").slice(0, 10), score: Math.round(v) }))}>
+                    <PolarGrid />
+                    <PolarAngleAxis dataKey="subject" tick={{ fontSize: 9 }} />
+                    <Radar dataKey="score" stroke="#2563eb" fill="#2563eb" fillOpacity={0.3} />
+                    <Tooltip />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-6 text-muted-foreground text-sm">
+              <p>Submit preferences to see family alignment charts.</p>
+              <Link href="/preferences" className="text-brand-600 hover:underline text-xs mt-1 inline-block">Complete preferences →</Link>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* FEATURE 4: CAREER ROADMAP (RULE-BASED LEARNING ENGINE) */}
       <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm space-y-6">

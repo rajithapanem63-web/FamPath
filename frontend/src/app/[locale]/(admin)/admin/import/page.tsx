@@ -26,7 +26,7 @@ export default function AdminImportPage() {
   const [job, setJob] = useState<ImportJob | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8001";
 
   async function handleUpload() {
     if (!file) return;

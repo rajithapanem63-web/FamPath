@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/routing';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -148,7 +148,7 @@ export default function PreferencesPage() {
       });
       
       // Redirect to dashboard
-      router.push('/en/dashboard');
+      router.push('/dashboard');
     } catch (error: any) {
       console.error('Failed to submit preferences:', error);
       const errorMsg = error?.response?.data?.message || error?.response?.data?.detail || 'Failed to submit preferences. Please try again.';

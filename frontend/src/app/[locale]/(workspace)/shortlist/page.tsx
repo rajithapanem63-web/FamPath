@@ -22,6 +22,7 @@ interface ShortlistItem {
 
 export default function ShortlistPage() {
   const t = useTranslations("shortlist");
+  const tCommon = useTranslations("common");
   const { workspace } = useWorkspaceStore();
   const qc = useQueryClient();
   const [isCompareOpen, setIsCompareOpen] = useState(false);
@@ -86,7 +87,7 @@ export default function ShortlistPage() {
         </div>
       </div>
 
-      {isLoading && <p className="text-muted-foreground text-sm">{useTranslations("common")("loading")}</p>}
+      {isLoading && <p className="text-muted-foreground text-sm">{tCommon("loading")}</p>}
 
       {!isLoading && items.length === 0 && (
         <div className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-12 text-center">

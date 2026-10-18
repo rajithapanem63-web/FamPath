@@ -38,7 +38,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   function handleSignOut() {
     clear();
-    if (typeof window !== "undefined") sessionStorage.removeItem("fampath_token");
+    if (typeof window !== "undefined") sessionStorage.removeItem("access_token");
     router.replace("/sign-in");
   }
 

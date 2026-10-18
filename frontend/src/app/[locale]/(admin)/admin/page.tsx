@@ -16,7 +16,7 @@ interface FreshnessRecord {
 export default function AdminDashboard() {
   const { data: freshness, isLoading } = useQuery<FreshnessRecord[]>({
     queryKey: ["admin-freshness"],
-    queryFn: () => get("/api/v1/admin/freshness").then((r: any) => r.records ?? []),
+    queryFn: () => get("/admin/freshness").then((r: any) => r.records ?? []),
     retry: false,
   });
 

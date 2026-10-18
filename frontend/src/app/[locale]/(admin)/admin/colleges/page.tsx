@@ -32,7 +32,7 @@ export default function AdminCollegesPage() {
   const { data, isLoading } = useQuery<CollegesResponse>({
     queryKey: ["admin-colleges", page, search],
     queryFn: () =>
-      get(`/api/v1/admin/colleges?page=${page}&page_size=20${search ? `&search=${encodeURIComponent(search)}` : ""}`),
+      get(`/admin/colleges?page=${page}&page_size=20${search ? `&search=${encodeURIComponent(search)}` : ""}`),
   });
 
   return (

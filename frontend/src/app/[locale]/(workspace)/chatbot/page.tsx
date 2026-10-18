@@ -28,7 +28,13 @@ export default function ChatbotPage() {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [showConsent, setShowConsent] = useState(false);
-  const [hasConsent, setHasConsent] = useState(false);
+  // Persist consent in localStorage so user doesn't see it every visit
+  const [hasConsent, setHasConsent] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("fampath_chatbot_consent") === "true";
+    }
+    return false;
+  });
   const bottomRef = useRef<HTMLDivElement>(null);
   const qc = useQueryClient();
 
@@ -72,6 +78,9 @@ export default function ChatbotPage() {
   function handleStart() {
     setHasConsent(true);
     setShowConsent(false);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("fampath_chatbot_consent", "true");
+    }
     createSession.mutate();
   }
 

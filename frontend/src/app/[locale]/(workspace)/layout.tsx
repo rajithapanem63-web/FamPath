@@ -54,7 +54,7 @@ export default function WorkspaceLayout({ children }: { children: React.ReactNod
   function handleSignOut() {
     clear();
     if (typeof window !== "undefined") {
-      sessionStorage.removeItem("fampath_token");
+      sessionStorage.removeItem("access_token");
     }
     router.replace("/sign-in");
   }
